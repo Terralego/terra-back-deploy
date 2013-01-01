@@ -43,7 +43,6 @@ RUN bash -c 'set -ex \
     && venv/bin/pip install -U setuptools wheel \
     && venv/bin/pip install -U --no-cache-dir -r ./requirements.txt \
     && if [[ -n "$BUILD_DEV" ]];then \
-      : dev requirements will be handled separatly in a later iteration;\
       venv/bin/pip install -U --no-cache-dir \
       -r ./requirements-dev.txt;\
     fi \
