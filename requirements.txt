@@ -1,0 +1,6 @@
+Django>=2.0,<2.1.0
+django-redis>=4.9,<4.10
+-e ./lib/terra-back
+
+# webserver
+gunicorn>=19.8,<19.9

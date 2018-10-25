@@ -1,0 +1,53 @@
+---
+cops_terralego_name: terralegoinstance
+cops_terralego_deploy_env: "dev"
+cops_terralego_docker_image_tag: "{{cops_terralego_name}}"
+cops_terralego_default_docker_tag: "latest"
+cops_terralego_docker_tag: "{{cops_terralego_default_docker_tag}}"
+cops_terralego_tld_domain: example.com
+cops_terralego_mail_domain: "{{ cops_terralego_tld_domain }}"
+cops_terralego_default_gitref: "master"
+cops_terralego_gitref: "{{cops_terralego_default_gitref}}"
+cops_terralego_dir: "/srv/docker/{{cops_terralego_name}}back"
+cops_terralego_hostname: "{{cops_terralego_deploy_env}}-terralego-{{cops_terralego_name}}.{{cops_terralego_tld_domain}}"
+cops_terralego_alternate_hostname: [".{{cops_terralego_tld_domain}}"]
+cops_terralego_secret_key: "SuperSecret"
+cops_terralego_gateway: "{{ ansible_default_ipv4.address}}"
+cops_terralego_front_hostname: "localhost"
+cops_terralego_front_url: "http://{{ cops_terralego_gateway }}:9080"
+cops_terralego_composename: "{{cops_terralego_name}}back"
+cops_terralego_db_user: "secretJFCxwPHz99R9jIi"
+cops_terralego_db_password: "secret4gzQNe3c8851VOJ"
+cops_terralego_db_name: "{{cops_terralego_name}}"
+cops_terralego_devmode: False
+cops_terralego_build_args: "--no-cache django cron"
+# backup could be remove in a-while when we have redeployed it everywhere
+cops_terralego_restarted_services: "db redis django nginx backup cron"
+cops_terralego_purge_volumes: [statics]
+cops_terralego_sshargs: >-
+  {% set k = hostvars[inventory_hostname].get(
+                'ansible_ssh_private_key_file', '') %}
+  {% if k%}-o IdentityFile={{k}} -o IdentitiesOnly=yes{%endif%}
+  {% if (
+      hostvars[inventory_hostname].ansible_connection|default('ssh')
+     ) not in [ 'smart', 'local'] %}
+  {{ hostvars[inventory_hostname].ssh_args | default('') }}
+  {{ hostvars[inventory_hostname].ansible_ssh_args | default('') }}
+  {{ hostvars[inventory_hostname].ansible_ssh_common_args | default('') }}
+  {{ hostvars[inventory_hostname].ansible_ssh_extra_args | default('') }}
+  {% endif %}
+cops_terralego_build: false
+cops_terralego_pull: true
+cops_terralego_registries: []
+#- {registry: registry.foo.net, username: foo, password: bar}
+cops_terralego_compose_files: [docker-compose.yml, docker-compose-prod.yml]
+cops_terralego_dc:
+  docker-compose {% for i in cops_terralego_compose_files %} -f {{i}}{% endfor %}
+  -p "{{cops_terralego_composename}}"
+cops_terralego_default_from_email: noreply@{{cops_terralego_hostname}}
+cops_terralego_server_email: "{{cops_terralego_default_from_email}}"
+cops_terralego_email_server: mailcatcher
+cops_terralego_email_host_user: ''
+cops_terralego_email_host_password: ''
+cops_terralego_email_host_port: 1025
+cops_terralego_email_use_tls: 'False'

@@ -1,0 +1,121 @@
+---
+- file:
+    state: directory
+    mode: "2751"
+    path: "{{item}}"
+  with_items:
+  - "{{cops_terralego_dir}}"
+  - "{{cops_terralego_dir}}/local/postgresql/data"
+  - "{{cops_terralego_dir}}/local/backup"
+  - "{{cops_terralego_dir}}/local/backup/data"
+  - "{{cops_terralego_dir}}/local/backup/setup"
+- name: Synchronise files inside the environment (deleguation)
+  delegate_to: "localhost"
+  synchronize:
+    compress: false
+    ssh_args: "{{cops_terralego_sshargs}}"
+    src: "../../../../../"
+    dest: "{{cops_terralego_dir}}/"
+    rsync_opts: ["-azv", "--exclude", ".ansible", "--exclude", "local", "--exclude", ".git",
+                 "--exclude", ".env",
+                 "--exclude", "docker.env"]
+    set_remote_user: "no"
+    #update_opts: '--recursive'
+- template:
+    src: "dbsmartbackup.yml"
+    dest: "{{cops_terralego_dir}}/local/backup/setup/reconfigure.yml"
+    mode: "0640"
+    trim_blocks: false
+- template:
+    src: "local.py"
+    dest: "{{cops_terralego_dir}}/local.py"
+    mode: "0644"
+    trim_blocks: false
+- template:
+    src: "docker.env"
+    dest: "{{cops_terralego_dir}}/docker.env"
+    mode: "0640"
+    trim_blocks: false
+- blockinfile:
+    create: true
+    path: "{{cops_terralego_dir}}/.env"
+    content: |-
+      COMPOSE_PROJECT_NAME={{cops_terralego_composename}}
+      CI_COMMIT_SHA={{cops_terralego_gitref}}
+      DJANGO_IMAGE_VERSION={{cops_terralego_docker_tag}}
+      DJANGO_NAME={{ cops_terralego_name }}
+      DJANGO_IMAGE={{ cops_terralego_docker_image }}
+    marker: "# ANSIBLE MANAGED BLOCK :: deploy commit :: {mark}"
+- include_tasks: docker_login.yml
+  with_items: "{{cops_terralego_registries}}"
+- shell: |
+    set -ex
+    falsd
+    cd "{{cops_terralego_dir}}"
+    {{cops_terralego_dc}} build {{cops_terralego_build_args}}
+  when:
+  - "cops_terralego_build|copsf_asbool"
+  - "cops_terralego_build_args|copsf_asbool"
+# ensure all images are (re) pulled
+- shell: |
+    set -ex
+    cd "{{cops_terralego_dir}}"
+    {{cops_terralego_dc}} pull
+  retries: 5
+  delay: 10
+  when:
+  - "cops_terralego_pull|copsf_asbool"
+- include_role: {name: corpusops.roles/docker_compose_service}
+  vars:
+    _docker_compose_service:
+      working_directory: "{{cops_terralego_dir}}"
+      files: [docker-compose.yml]
+      project: "{{cops_terralego_composename}}"
+      restart: "on-failure"
+  tags: [service]
+- include_role: {name: corpusops.roles/docker_compose_service}
+  vars:
+    _docker_compose_service:
+      working_directory: "{{cops_terralego_dir}}"
+      files: "{{cops_terralego_compose_files}}"
+      project: "{{cops_terralego_composename}}"
+      restart: "on-failure"
+  tags: [service]
+# ensure manually handled services are booted
+# to handle sidekar volumes refresh accuratly
+- shell: |
+    set -ex
+    cd "{{cops_terralego_dir}}"
+    {{cops_terralego_dc}} up -d --no-deps --force-recreate {{cops_terralego_restarted_services}}
+    {% for i in cops_terralego_restarted_services.split()|reverse %}
+    {{cops_terralego_dc}} ps --services --filter status=running | egrep -q "^{{i}}$"
+    {% endfor %}
+  retries: 60
+  delay: 1
+  register: purge_volumes
+  until: "purge_volumes.rc == 0"
+## as we use a named volume for nginx sidekar container, also
+## purge the obsolete volumes leftover in-between
+- shell: |
+    set -ex
+    cd "{{cops_terralego_dir}}"
+    if [[ -n "{{cops_terralego_docker_tag}}" ]];then
+    {% for purge_volume in cops_terralego_purge_volumes %}
+    for v in $(docker volume ls |awk '{print $2 }'|egrep "^{{cops_terralego_composename}}-{{purge_volume}}-"|grep -v {{cops_terralego_docker_tag}});do
+      if ( docker volume inspect $v >/dev/null 2>&1; );then
+        if ! ( docker volume rm -f $v; );then
+          docker volume inspect $v;exit 1;
+        fi
+        echo "purged volume $v">&2
+      fi
+    done
+    fi
+    {% endfor %}
+  # let time to docker to clean volumes
+  args: {executable: /bin/bash}
+  retries: 60
+  delay: 1
+  register: purge_volumes
+  until: "purge_volumes.rc == 0"
+  when: "cops_terralego_docker_tag|copsf_asbool"
+  changed_when: "'purged volume' in purge_volumes.stderr"
