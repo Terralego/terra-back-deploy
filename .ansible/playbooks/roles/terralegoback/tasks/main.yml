@@ -14,11 +14,9 @@
   synchronize:
     compress: false
     ssh_args: "{{cops_terralego_sshargs}}"
-    src: "../../../../../"
+    src: "{{cops_terralego_code_dir}}"
     dest: "{{cops_terralego_dir}}/"
-    rsync_opts: ["-azv", "--exclude", ".ansible", "--exclude", "local", "--exclude", ".git",
-                 "--exclude", ".env",
-                 "--exclude", "docker.env"]
+    rsync_opts: "{{cops_terralego_code_rsync_opts}}"
     set_remote_user: "no"
     #update_opts: '--recursive'
 - template:

@@ -57,3 +57,15 @@ cops_terralego_dotenv_extra: ""
 cops_terralego_docker_env_extra: ""
 # free form for params inside local.py
 cops_terralego_localpy_extra: ""
+# Normally playbook is in ./.ansible/playbooks
+cops_terralego_code_dir: "{{playbook_dir}}/../.."
+cops_terralego_code_rsync_opts: [
+    "-azv",
+    # include deploy projects base code
+    "--include", "local/*-deploy",
+    "--exclude", ".ansible",
+    "--exclude", "local/*",
+    "--exclude", ".git",
+    "--exclude", ".tox",
+    "--exclude", ".env",
+    "--exclude", "docker.env"]
