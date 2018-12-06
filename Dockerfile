@@ -64,12 +64,14 @@ RUN bash -c 'set -ex \
     && chmod +x /usr/bin/dockerize && cd / && rm -rf /tmp/dockerize'
 
 ADD crontab /etc/cron.d/django
-ADD prod/cron.sh /code/cron.sh
+ADD local/terra-back-deploy/prod/cron.sh /code/cron.sh
 CMD bash -c 'set -ex \
     && chmod +x /code/cron.sh \
     && chmod 0644 /etc/cron.d/django'
 
-ADD prod/start.sh prod/init.sh requirements-dev.txt requirements.txt /code/
+ADD local/terra-back-deploy/prod/start.sh \
+    local/terra-back-deploy/prod/init.sh \
+    requirements-dev.txt requirements.txt /code/
 ADD src /code/src/
 ADD lib /code/lib/
 ADD private /code/private/
