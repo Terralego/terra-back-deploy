@@ -51,3 +51,9 @@ cops_terralego_email_host_user: ''
 cops_terralego_email_host_password: ''
 cops_terralego_email_host_port: 1025
 cops_terralego_email_use_tls: 'False'
+# free form for params inside dockerenv
+cops_terralego_dotenv_extra: ""
+# free form for params inside dockerenv
+cops_terralego_docker_env_extra: ""
+# free form for params inside local.py
+cops_terralego_localpy_extra: ""

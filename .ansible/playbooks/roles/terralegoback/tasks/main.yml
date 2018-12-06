@@ -45,6 +45,7 @@
       DJANGO_IMAGE_VERSION={{cops_terralego_docker_tag}}
       DJANGO_NAME={{ cops_terralego_name }}
       DJANGO_IMAGE={{ cops_terralego_docker_image }}
+      {{cops_terralego_dotenv_extra}}
     marker: "# ANSIBLE MANAGED BLOCK :: deploy commit :: {mark}"
 - include_tasks: docker_login.yml
   with_items: "{{cops_terralego_registries}}"

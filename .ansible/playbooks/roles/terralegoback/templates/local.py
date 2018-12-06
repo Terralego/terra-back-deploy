@@ -27,5 +27,6 @@ USE_TLS = {{ cops_terralego_email_use_tls }}
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='mailcatcher'
 DJANGO__EMAIL_PORT=25
-
 #SERVER_EMAIL = '{{ cops_terralego_server_email }}'
+
+{{ cops_terralego_localpy_extra}}
