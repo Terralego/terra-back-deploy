@@ -6,5 +6,6 @@ coverage
 isort
 pylama
 tblib
+eradicate
 
 xlrd
