@@ -1,6 +1,6 @@
 #! /bin/bash
 TOPDIR="$(dirname $(readlink -f "$0"))"
-# AS django
+# AS $user
 set -e
 . ../venv/bin/activate
 # Regenerate egg-info & be sure to have it in site-packages
