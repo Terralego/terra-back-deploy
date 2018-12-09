@@ -63,7 +63,7 @@ RUN bash -c 'set -ex \
     && mv -f dockerize /usr/bin/dockerize \
     && chmod +x /usr/bin/dockerize && cd / && rm -rf /tmp/dockerize'
 
-ADD local/terra-back-deploy/crontab /etc/cron.d/django
+ADD crontab /etc/cron.d/django
 ADD local/terra-back-deploy/prod/cron.sh /code/cron.sh
 CMD bash -c 'set -ex \
     && chmod +x /code/cron.sh \
