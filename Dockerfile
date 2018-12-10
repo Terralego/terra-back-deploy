@@ -69,7 +69,7 @@ CMD chmod 0644 /etc/cron.d/django
 ADD local/terra-back-deploy/prod/start.sh \
     local/terra-back-deploy/prod/cron.sh \
     local/terra-back-deploy/prod/init.sh \
-    /code/init
+    /code/init/
 
 ADD requirements-dev.txt requirements.txt /code/
 ADD src /code/src/
