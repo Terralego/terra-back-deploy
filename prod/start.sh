@@ -1,7 +1,10 @@
 #! /bin/bash
-TOPDIR="$(dirname $(readlink -f "$0"))"
 # AS $user
 set -e
+SCRIPTSDIR="$(dirname $(readlink -f "$0"))"
+cd "$SCRIPTSDIR/.."
+TOPDIR=$(pwd)
+cd src
 . ../venv/bin/activate
 # Regenerate egg-info & be sure to have it in site-packages
 regen_egg_info() {

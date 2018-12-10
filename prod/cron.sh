@@ -1,6 +1,9 @@
 #! /bin/bash
 # AS root
 set -ex
+SCRIPTSDIR="$(dirname $(readlink -f "$0"))"
+cd "$SCRIPTSDIR/.."
+TOPDIR=$(pwd)
 export APP_TYPE="${APP_TYPE:-docker}"
 export APP_USER="${APP_USER:-$APP_TYPE}"
 export APP_GROUP="$APP_USER"
