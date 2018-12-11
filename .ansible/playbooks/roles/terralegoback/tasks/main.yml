@@ -64,14 +64,6 @@
   vars:
     _docker_compose_service:
       working_directory: "{{cops_terralego_dir}}"
-      files: [docker-compose.yml]
-      project: "{{cops_terralego_composename}}"
-      restart: "on-failure"
-  tags: [service]
-- include_role: {name: corpusops.roles/docker_compose_service}
-  vars:
-    _docker_compose_service:
-      working_directory: "{{cops_terralego_dir}}"
       files: "{{cops_terralego_compose_files}}"
       project: "{{cops_terralego_composename}}"
       restart: "on-failure"
