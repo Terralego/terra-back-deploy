@@ -56,6 +56,7 @@ cops_terralego_email_use_tls: 'no'
 cops_terralego_sentry_dsn: ''
 cops_terralego_dotenv: |-
   APP_TYPE=django
+  DJANGO_SETTINGS_MODULE=project.settings.instances.{{cops_terralego_deploy_env}}
   DJANGO_NAME={{ cops_terralego_name }}
   COMPOSE_PROJECT_NAME={{cops_terralego_composename}}
   CI_COMMIT_SHA={{cops_terralego_gitref}}
