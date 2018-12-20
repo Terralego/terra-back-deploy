@@ -50,7 +50,7 @@ cops_terralego_mailcatcher_password: mailcatcher
 cops_terralego_email_server: mailcatcher
 cops_terralego_email_host_user: ''
 cops_terralego_email_host_password: ''
-cops_terralego_email_host_port: 25
+cops_terralego_email_host_port: 1025
 cops_terralego_email_use_tls: 'no'
 # free form for params inside dockerenv
 cops_terralego_sentry_dsn: ''
