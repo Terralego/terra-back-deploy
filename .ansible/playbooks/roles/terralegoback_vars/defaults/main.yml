@@ -52,6 +52,7 @@ cops_terralego_email_host_password: ''
 cops_terralego_email_host_port: 1025
 cops_terralego_email_use_tls: 'False'
 # free form for params inside dockerenv
+cops_terralego_sentry_dsn: ''
 cops_terralego_dotenv: |-
   APP_TYPE=django
   DJANGO_NAME={{ cops_terralego_name }}
