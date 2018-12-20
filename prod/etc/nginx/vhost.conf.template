@@ -144,6 +144,6 @@ server {
     }
 
     location ~ ^/mailcatcher/ {
-        proxy_pass http://mailcatcher:80;
+        proxy_pass http://mailcatcher:8025;
     }
 }
