@@ -45,7 +45,8 @@ cops_terralego_dc:
   docker-compose {% for i in cops_terralego_compose_files %} -f {{i}}{% endfor %}
   -p "{{cops_terralego_composename}}"
 cops_terralego_default_from_email: noreply@{{cops_terralego_hostname}}
-cops_terralego_server_email: "{{cops_terralego_default_from_email}}"
+cops_terralego_mailcatcher_user: mailcatcher
+cops_terralego_mailcatcher_password: mailcatcher
 cops_terralego_email_server: mailcatcher
 cops_terralego_email_host_user: ''
 cops_terralego_email_host_password: ''
