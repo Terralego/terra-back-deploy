@@ -57,9 +57,9 @@ cops_terralego_email_use_tls: 'no'
 cops_terralego_sentry_tags: ["{{cops_terralego_deploy_env}}"]
 cops_terralego_sentry_dsn: ''
 cops_terralego_docker_env_freeform: |-
-  {{ cops_django_docker_env_defaults}}
-  {{ cops_django_docker_env_extra}}
-cops_django_docker_env_defaults: |-
+  {{ cops_terralego_docker_env_defaults}}
+  {{ cops_terralego_docker_env_extra}}
+cops_terralego_docker_env_defaults: |-
   HOSTNAME="${PROJECT_NAME}"
   FRONT_URL={{ cops_terralego_front_url }}
   DJANGO__FRONT_URL={{ cops_terralego_front_url }}
