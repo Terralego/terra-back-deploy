@@ -54,7 +54,7 @@ cops_terralego_email_host_password: ''
 cops_terralego_email_host_port: 1025
 cops_terralego_email_use_tls: 'no'
 # free form for params inside dockerenv
-cops_terralego_sentry_tags: ["{{cops_terralego_deploy_env}}"]
+cops_terralego_sentry_tags: ["env:{{cops_terralego_deploy_env}}"]
 cops_terralego_sentry_dsn: ''
 cops_terralego_docker_env_freeform: |-
   {{ cops_terralego_docker_env_defaults}}
@@ -83,6 +83,7 @@ cops_terralego_docker_env_defaults: |-
   DJANGO__DEPLOY_ENV={{cops_terralego_deploy_env}}
   {% if cops_terralego_sentry_dsn %}
   DJANGO__SENTRY_DSN={{cops_terralego_sentry_dsn}}
+  DJANGO__SENTRY_RELEASE={{cops_terralego_docker_tag}}
   DJANGO__SENTRY_TAGS={{cops_terralego_sentry_tags|join(',')}}
   {% endif %}
   {% if cops_terralego_devmode %}
