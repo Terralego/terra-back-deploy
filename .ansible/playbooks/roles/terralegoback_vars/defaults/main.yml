@@ -56,6 +56,48 @@ cops_terralego_email_use_tls: 'no'
 # free form for params inside dockerenv
 cops_terralego_sentry_tags: ["{{cops_terralego_deploy_env}}"]
 cops_terralego_sentry_dsn: ''
+cops_terralego_docker_env_freeform: |-
+  {{ cops_django_docker_env_defaults}}
+  {{ cops_django_docker_env_extra}}
+cops_django_docker_env_defaults: |-
+  HOSTNAME="${PROJECT_NAME}"
+  FRONT_URL={{ cops_terralego_front_url }}
+  DJANGO__FRONT_URL={{ cops_terralego_front_url }}
+  #
+  # This need to be changed in production
+  SECRET_KEY={{ cops_terralego_secret_key }}
+  # db
+  POSTGRES_USER={{ cops_terralego_db_user }}
+  POSTGRES_DB={{ cops_terralego_db_name }}
+  POSTGRES_PASSWORD={{cops_terralego_db_password }}
+  PGPASSWD={{cops_terralego_db_password }}
+  # cors
+  DJANGO__CORS_ORIGIN_WHITELIST={{(
+    [cops_terralego_hostname, '0.0.0.0', '.{0}'.format(cops_terralego_hostname)]+
+    cops_terralego_alternate_hostnames
+  )|join('-|_')}}
+  DJANGO__ALLOWED_HOSTS={{(
+    [cops_terralego_hostname, '.{0}'.format(cops_terralego_hostname)]+
+    cops_terralego_alternate_hostnames
+  )|join('-|_')}}
+  DJANGO__DEPLOY_ENV={{cops_terralego_deploy_env}}
+  {% if cops_terralego_sentry_dsn %}
+  DJANGO__SENTRY_DSN={{cops_terralego_sentry_dsn}}
+  DJANGO__SENTRY_TAGS={{cops_terralego_sentry_tags|join(',')}}
+  {% endif %}
+  {% if cops_terralego_devmode %}
+  DJANGO__CORS_ORIGIN_ALLOW_ALL=y
+  DJANGO__DEBUG=y
+  {% endif %}
+  DJANGO__DEFAULT_FROM_EMAIL={{ cops_terralego_default_from_email }}
+  DJANGO__SERVER_EMAIL={{ cops_terralego_server_email }}
+  DJANGO__EMAIL_HOST={{cops_terralego_email_server}}
+  DJANGO__EMAIL_PORT={{cops_terralego_email_host_port}}
+  DJANGO__EMAIL_HOST_USER={{cops_terralego_email_host_user}}
+  DJANGO__EMAIL_HOST_PASSWORD={{cops_terralego_email_host_password}}
+  MAILCATCHER_USER={{cops_terralego_mailcatcher_user}}
+  MAILCATCHER_PASSWORD={{cops_terralego_mailcatcher_password}}
+  {{ cops_terralego_docker_env_extra}}
 cops_terralego_dotenv: |-
   APP_TYPE=django
   DJANGO_SETTINGS_MODULE=project.settings.instances.{{cops_terralego_deploy_env}}
