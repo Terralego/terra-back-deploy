@@ -74,11 +74,11 @@ cops_django_docker_env_defaults: |-
   # cors
   DJANGO__CORS_ORIGIN_WHITELIST={{(
     [cops_terralego_hostname, '0.0.0.0', '.{0}'.format(cops_terralego_hostname)]+
-    cops_terralego_alternate_hostnames
+    cops_terralego_alternate_hostname
   )|join('-|_')}}
   DJANGO__ALLOWED_HOSTS={{(
     [cops_terralego_hostname, '.{0}'.format(cops_terralego_hostname)]+
-    cops_terralego_alternate_hostnames
+    cops_terralego_alternate_hostname
   )|join('-|_')}}
   DJANGO__DEPLOY_ENV={{cops_terralego_deploy_env}}
   {% if cops_terralego_sentry_dsn %}
