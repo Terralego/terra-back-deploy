@@ -56,6 +56,11 @@ cops_terralego_email_use_tls: 'no'
 # free form for params inside dockerenv
 cops_terralego_sentry_tags: ["env:{{cops_terralego_deploy_env}}"]
 cops_terralego_sentry_dsn: ''
+cops_terralego_hosts_whitelist: |-
+  {{(
+    [cops_terralego_hostname, '0.0.0.0', '.{0}'.format(cops_terralego_hostname)]+
+    cops_terralego_alternate_hostname
+  )|join('-|_')}}
 cops_terralego_docker_env_freeform: |-
   {{ cops_terralego_docker_env_defaults}}
   {{ cops_terralego_docker_env_extra}}
@@ -72,14 +77,8 @@ cops_terralego_docker_env_defaults: |-
   POSTGRES_PASSWORD={{cops_terralego_db_password }}
   PGPASSWD={{cops_terralego_db_password }}
   # cors
-  DJANGO__CORS_ORIGIN_WHITELIST={{(
-    [cops_terralego_hostname, '0.0.0.0', '.{0}'.format(cops_terralego_hostname)]+
-    cops_terralego_alternate_hostname
-  )|join('-|_')}}
-  DJANGO__ALLOWED_HOSTS={{(
-    [cops_terralego_hostname, '0.0.0.0', '.{0}'.format(cops_terralego_hostname)]+
-    cops_terralego_alternate_hostname
-  )|join('-|_')}}
+  DJANGO__CORS_ORIGIN_WHITELIST={{cops_terralego_hosts_whitelist}}
+  DJANGO__ALLOWED_HOSTS={{cops_terralego_hosts_whitelist}}
   DJANGO__DEPLOY_ENV={{cops_terralego_deploy_env}}
   {% if cops_terralego_sentry_dsn %}
   DJANGO__SENTRY_DSN={{cops_terralego_sentry_dsn}}
