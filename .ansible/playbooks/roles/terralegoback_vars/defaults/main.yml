@@ -65,10 +65,8 @@ cops_terralego_docker_env_freeform: |-
   {{ cops_terralego_docker_env_extra}}
 cops_terralego_docker_env_defaults: |-
   HOSTNAME="${PROJECT_NAME}"
-  NGINX_FRONT_URL={{ cops_terralego_front_url }}
-  DJANGO__FRONT_URL={{ cops_terralego_front_url }}
-  #retrocompat
   FRONT_URL={{ cops_terralego_front_url }}
+  DJANGO__FRONT_URL={{ cops_terralego_front_url }}
   #
   # This need to be changed in production
   SECRET_KEY={{ cops_terralego_secret_key }}

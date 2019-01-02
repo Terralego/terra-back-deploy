@@ -140,7 +140,7 @@ server {
     }
 
     location / {
-        proxy_pass ${NGINX_FRONT_URL};
+        proxy_pass ${FRONT_URL};
     }
 
     location ~ ^/mailcatcher/ {
