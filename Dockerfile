@@ -40,7 +40,7 @@ RUN bash -c 'set -ex \
     && chown django:django -R /code \
     && cd /code \
     && gosu django:django bash -c "python${PY_VER} -m venv venv \
-    && venv/bin/pip install -U setuptools wheel \
+    && venv/bin/pip install -U --no-cache-dir setuptools wheel \
     && venv/bin/pip install -U --no-cache-dir -r ./requirements.txt \
     && if [[ -n "$BUILD_DEV" ]];then \
       venv/bin/pip install -U --no-cache-dir \
