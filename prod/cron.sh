@@ -12,4 +12,6 @@ for i in $USER_DIRS;do
     if [ ! -e "$i" ];then mkdir -p "$i";fi
     chown $APP_USER:$APP_GROUP "$i"
 done
+# load locales & default env
+for i in /etc/environment /etc/default/locale;do if [ -e $i ];then . $i;fi;done
 exec /usr/sbin/cron -f

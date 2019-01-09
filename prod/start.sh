@@ -5,6 +5,8 @@ SCRIPTSDIR="$(dirname $(readlink -f "$0"))"
 cd "$SCRIPTSDIR/.."
 TOPDIR=$(pwd)
 cd src
+# load locales & default env
+for i in /etc/environment /etc/default/locale;do if [ -e $i ];then . $i;fi;done
 . ../venv/bin/activate
 # Regenerate egg-info & be sure to have it in site-packages
 regen_egg_info() {
