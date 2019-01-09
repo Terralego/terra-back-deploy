@@ -45,7 +45,6 @@
   with_items: "{{cops_terralego_registries}}"
 - shell: |
     set -ex
-    falsd
     cd "{{cops_terralego_dir}}"
     {{cops_terralego_dc}} build {{cops_terralego_build_args}}
   when:
