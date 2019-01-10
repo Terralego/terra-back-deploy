@@ -22,7 +22,8 @@ cops_terralego_db_name: "{{cops_terralego_name}}"
 cops_terralego_devmode: False
 cops_terralego_build_args: "--no-cache django cron"
 # backup could be remove in a-while when we have redeployed it everywhere
-cops_terralego_restarted_services: "db redis django nginx backup cron"
+cops_terralego_restarted_services_default: "db redis django nginx backup cron"
+cops_terralego_restarted_services: "{{cops_terralego_restarted_services_default}}"
 cops_terralego_purge_volumes: [statics]
 cops_terralego_sshargs: >-
   {% set k = hostvars[inventory_hostname].get(
