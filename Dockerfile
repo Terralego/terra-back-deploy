@@ -31,7 +31,8 @@ ADD local/terra-back-deploy/prod/start.sh \
     local/terra-back-deploy/prod/init.sh \
     /code/init/
 
-ADD requirements-dev.txt requirements.txt /code/
+ADD requirements*.txt tox.ini README.md /code/
+ADD local/terra-back-deploy/ local/terra-back-deploy/
 ADD src /code/src/
 ADD lib /code/lib/
 ADD private /code/private/
