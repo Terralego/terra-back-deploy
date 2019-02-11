@@ -5,17 +5,12 @@
 {{ $v := merge $v ( dict "cert"                        ( .Env.SSL_CERT_PATH | default ( print $v.certspath  "/cert.crt" ))            ) }}
 {{ $v := merge $v ( dict "key"                         ( .Env.SSL_KEY_PATH  | default ( print $v.certspath  "/cert.key" ))            ) }}
 {{ $v := merge $v ( dict "diffie"                      ( .Env.NGINX_DH_FILE | default ( print $v.certspath  "/dhparams.pem" ))        ) }}
-{{ $v := merge $v ( dict "nossl"                       ( .Env.NO_SSL | default "" )                                                   ) }}
-{{ if $v.nossl }}
-{{ $v := merge $v ( dict "defaultnoforcessl" "1" )}}
-{{ else }}
-{{ $v := merge $v ( dict "defaultnoforcessl" "" )}}
-{{ end }}
-{{ $v := merge $v ( dict "noforcessl"                  ( .Env.NO_FORCE_SSL | default $v.defaultnoforcessl )                           ) }}
-{{ $v := merge $v ( dict "nostatics"                   ( .Env.NO_STATICS | default "" )                                               ) }}
+{{ $v := merge $v ( dict "nossl"                       ( .Env.NO_SSL | default "" | empty )                                           ) }}
+{{ $v := merge $v ( dict "noforcessl"                  ( .Env.NO_FORCE_SSL | default (not $v.nossl))                                  ) }}
+{{ $v := merge $v ( dict "nostatics"                   ( .Env.NO_STATICS | default "" | empty )                                       ) }}
 {{ $v := merge $v ( dict "server_name"                 ( .Env.NGINX_SERVERNAME | default "localhost" )                                ) }}
-{{ $v := merge $v ( dict "server_name_in_redirect"     ( .Env.NGINX_SERVERNAME | default "off" )                                       ) }}
-{{ $v := merge $v ( dict "server_name_in_redirect_ssl" ( .Env.NGINX_SERVERNAME_SSL | default $v.server_name_in_redirect )             ) }}
+{{ $v := merge $v ( dict "server_name_in_redirect"     ( .Env.NGINX_SERVERNAME_IN_REDIRECT | default "off" )                          ) }}
+{{ $v := merge $v ( dict "server_name_in_redirect_ssl" ( .Env.NGINX_SERVERNAME_IN_REDIRECT_SSL | default $v.server_name_in_redirect ) ) }}
 {{ $v := merge $v ( dict "real_ip_from_recursive"      ( .Env.NGINX_REAL_IP_FROM_RECURSIVE | default "on" )                           ) }}
 {{ $v := merge $v ( dict "real_ip_from"                ( .Env.NGINX_REAL_IP_FROM | default "10.0.0.0/8 172.16.0.0/12 192.168.0.0/16" )) }}
 {{ $v := merge $v ( dict "ssl_ciphers"                 ( .Env.NGINX_SSL_CIPHERS | default $dciphers )                                 ) }}
