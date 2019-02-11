@@ -5,9 +5,13 @@
 {{ $v := merge $v ( dict "cert"                        ( .Env.SSL_CERT_PATH | default ( print $v.certspath  "/cert.crt" ))            ) }}
 {{ $v := merge $v ( dict "key"                         ( .Env.SSL_KEY_PATH  | default ( print $v.certspath  "/cert.key" ))            ) }}
 {{ $v := merge $v ( dict "diffie"                      ( .Env.NGINX_DH_FILE | default ( print $v.certspath  "/dhparams.pem" ))        ) }}
-{{ $v := merge $v ( dict "nossl"                       ( .Env.NO_SSL | default "" | empty )                                           ) }}
-{{ $v := merge $v ( dict "noforcessl"                  ( .Env.NO_FORCE_SSL | default (not $v.nossl))                                  ) }}
-{{ $v := merge $v ( dict "nostatics"                   ( .Env.NO_STATICS | default "" | empty )                                       ) }}
+{{ $v := merge $v ( dict "nossl"                       ( .Env.NO_SSL | default "1" )                                                  ) }}
+{{ if not ( .Env.NO_FORCE_SSL | empty ) }}
+{{ $v := merge $v ( dict "noforcessl" .Env.NO_FORCE_SSL ) }}
+{{ else }}
+{{ $v := merge $v ( dict "noforcessl" ((eq $v.nossl "1") | ternary "0" "1" )) }}
+{{ end }}
+{{ $v := merge $v ( dict "nostatics"                   ( .Env.NO_STATICS | default "" )                                               ) }}
 {{ $v := merge $v ( dict "server_name"                 ( .Env.NGINX_SERVERNAME | default "localhost" )                                ) }}
 {{ $v := merge $v ( dict "server_name_in_redirect"     ( .Env.NGINX_SERVERNAME_IN_REDIRECT | default "off" )                          ) }}
 {{ $v := merge $v ( dict "server_name_in_redirect_ssl" ( .Env.NGINX_SERVERNAME_IN_REDIRECT_SSL | default $v.server_name_in_redirect ) ) }}
@@ -137,8 +141,8 @@ server {
     location = /502.html {
         root  /public/502.html;
     }
-    {{ if .noforcessl }}# {{ end }}if ($forwarded_ssl_scheme != "https"){ rewrite ^(.*)$ https://$host$1 permanent; }
-    {{ if not .nostatics }}
+    {{ if ne .noforcessl "1" }}# {{ end }}if ($forwarded_ssl_scheme != "https"){ rewrite ^(.*)$ https://$host$1 permanent; }
+    {{ if ne .nostatics "1" }}
     location /static_dj/ {
         alias /public/static/;
 
@@ -190,7 +194,7 @@ server {
 
 }
 
-{{ if not $v.nossl }}
+{{ if ne $v.nossl "1" }}
 
 server {
     listen 443 ssl;
