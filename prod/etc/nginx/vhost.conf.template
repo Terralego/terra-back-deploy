@@ -141,7 +141,7 @@ server {
     location = /502.html {
         root  /public/502.html;
     }
-    {{ if ne .noforcessl "1" }}# {{ end }}if ($forwarded_ssl_scheme != "https"){ rewrite ^(.*)$ https://$host$1 permanent; }
+    {{ if eq .noforcessl "1" }}# {{ end }}if ($forwarded_ssl_scheme != "https"){ rewrite ^(.*)$ https://$host$1 permanent; }
     {{ if ne .nostatics "1" }}
     location /static_dj/ {
         alias /public/static/;
