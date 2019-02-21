@@ -5,6 +5,8 @@
   tasks:
   - when: ["cops_terralegoback_lifecycle_app|default(true)"]
     tags: ["cops_terralegoback_lifecycle_app"]
+    include_role: {name: terralegoback_vars, allow_duplicates: false}
+  - when: ["cops_terralegoback_lifecycle_app"]
+    tags: ["cops_terralegoback_lifecycle_app"]
     block:
-    - include_role: {name: terralegoback_vars, allow_duplicates: false}
-    - include_role: {name: terralegoback,      allow_duplicates: false}
+    - include_role: {name: terralegoback,    allow_duplicates: false}
