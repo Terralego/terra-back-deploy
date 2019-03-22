@@ -57,8 +57,24 @@ cops_terralego_email_use_tls: 'no'
 # free form for params inside dockerenv
 cops_terralego_sentry_tags: ["env:{{cops_terralego_deploy_env}}"]
 cops_terralego_sentry_dsn: ''
+cops_terralego_tiles_base: "{{cops_terralego_deploy_env}}-tiles-{{cops_terralego_name}}.{{cops_terralego_tld_domain}}"
+cops_terralego_tiles: "{{cops_terralego_tiles_default}}"
+cops_terralego_tiles_default:
+- "{{cops_terralego_tiles_base}}"
+- "a-{{cops_terralego_tiles_base}}"
+- "b-{{cops_terralego_tiles_base}}"
+- "c-{{cops_terralego_tiles_base}}"
+- "d-{{cops_terralego_tiles_base}}"
+- "e-{{cops_terralego_tiles_base}}"
+- "f-{{cops_terralego_tiles_base}}"
+- "g-{{cops_terralego_tiles_base}}"
+- "h-{{cops_terralego_tiles_base}}"
+- "i-{{cops_terralego_tiles_base}}"
+- "j-{{cops_terralego_tiles_base}}"
 cops_terralego_hosts_whitelist: "{{(
-    [cops_terralego_hostname, '0.0.0.0', '.{0}'.format(cops_terralego_hostname)]+
+    cops_terralego_tiles+[
+     cops_terralego_hostname, '0.0.0.0',
+     '.{0}'.format(cops_terralego_hostname)]+
     cops_terralego_alternate_hostname
   )|join('-|_')}}"
 cops_terralego_docker_env_freeform: |-
