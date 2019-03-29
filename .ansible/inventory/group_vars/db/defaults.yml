@@ -1,0 +1,2 @@
+cops_terralego_db_host: "{{cops_terralego_gateway}}"
+# db_servers: db2

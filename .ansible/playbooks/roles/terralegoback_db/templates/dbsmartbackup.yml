@@ -1,0 +1,18 @@
+---
+cops_dbsmartbackup_confs:
+  db:
+    conf_path: /srv/backups/db.conf
+    keep_lasts: 1
+    type: postgresql
+    keep_days: 2
+    keep_logs: 7
+    _periodicity: "0 3 * * *"
+    free_form: |
+      export HOST="db"
+      export PORT="5432"
+      export DBNAMES="{{cops_terralego_db_name}}"
+      export PASSWORD="{{cops_terralego_db_password}}"
+      export DBUSER="{{cops_terralego_db_user}}"
+      export PGUSER="$DBUSER"
+      export RUNAS=""
+      export PGPASSWORD="$PASSWORD"

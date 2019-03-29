@@ -1,0 +1,12 @@
+---
+# APP
+- hosts: all
+  tasks: [{debug:  {msg: "{{db_servers}}"}}]
+- hosts: "{{db_servers|default('all')}}"
+  roles: [corpusops.roles/ansible_plugins]
+  tasks:
+  - when: ["cops_terralegoback_lifecycle_db|default(true)"]
+    tags: ["cops_terralegoback_lifecycle_db"]
+    block:
+    - include_role: {name: terralegoback_vars, allow_duplicates: false}
+    - include_role: {name: terralegoback_db,   allow_duplicates: false}
