@@ -45,6 +45,7 @@ RUN bash -c 'set -ex \
     && venv/bin/pip install -U --no-cache-dir -r ./requirements.txt \
     && if [[ -n "$BUILD_DEV" ]];then \
       venv/bin/pip install -U --no-cache-dir \
+      -r ./requirements.txt \
       -r ./requirements-dev.txt;\
     fi \
     && mkdir -p public/static public/media"'
