@@ -18,6 +18,8 @@ regen_egg_info() {
     fi
 }
 set -x
+GUNICORN_CLASS=${GUNICORN_CLASS:-sync}
+GUNICORN_EXTRA_ARGS="${GUNICORN_EXTRA_ARGS-}"
 GUNICORN_WORKERS=${GUNICORN_WORKERS:-4}
 DJANGO_LISTEN=${DJANGO_LISTEN:-"0.0.0.0:8000"}
 NO_MIGRATE=${NO_MIGRATE-}
@@ -42,7 +44,7 @@ fi
 # Run app
 if [[ -z ${NO_START} ]];then
     if [[ -z ${NO_GUNICORN} ]];then
-        exec gunicorn $DJANGO_WSGI -w $GUNICORN_WORKERS -b $DJANGO_LISTEN
+        exec gunicorn $DJANGO_WSGI -w $GUNICORN_WORKERS -b $DJANGO_LISTEN -k $GUNICORN_CLASS $GUNICORN_EXTRA_ARGS
     else
         exec ./manage.py runserver $DJANGO_LISTEN
     fi

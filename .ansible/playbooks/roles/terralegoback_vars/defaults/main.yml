@@ -102,7 +102,12 @@ cops_terralego_db_docker_env_freeform: |-
 cops_terralego_docker_env_freeform: |-
   {{ cops_terralego_docker_env_defaults}}
   {{ cops_terralego_docker_env_extra}}
+cops_terralego_gunicorn_class: "sync"
+cops_terralego_gunicorn_extra_args: ""
 cops_terralego_db_docker_env_defaults: |-
+  # gunicorn
+  GUNICORN_CLASS={{cops_terralego_gunicorn_class}}
+  GUNICORN_EXTRA_ARGS={{cops_terralego_gunicorn_extra_args}}
   # db
   POSTGRES_HOST={{ cops_terralego_db_host }}
   POSTGRES_PORT={{ cops_terralego_db_port }}
