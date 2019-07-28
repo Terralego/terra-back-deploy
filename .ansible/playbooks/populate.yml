@@ -1,0 +1,16 @@
+---
+- import_playbook: app.yml
+- hosts: "{{terralegoback_servers|default('all')}}"
+  roles: [corpusops.roles/ansible_plugins]
+  tasks:
+  - when: ["cops_terralegoback_lifecycle_populate|default(true)"]
+    tags: ["cops_terralegoback_lifecycle_populate"]
+    block:
+    - include_role: {name: terralegoback_vars, allow_duplicates: false}
+    - shell: |-
+        set -e
+        cd {{cops_terralego_dir}}
+        ./control.sh manage populatedata 2>&1
+      register: populate
+      failed_when: 
+      - "'loading data for dataloader' not in populate.stdout.lower()"
