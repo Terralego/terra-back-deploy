@@ -13,4 +13,4 @@
         ./control.sh manage populatedata 2>&1
       register: populate
       failed_when: 
-      - "'loading data for dataloader' not in populate.stdout.lower()"
+      - "'loading data for dataloader' not in populate.stdout.lower() and populate.rc != 0"
