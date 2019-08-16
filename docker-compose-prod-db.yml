@@ -10,13 +10,12 @@ services:
     - "$POSTGRES_HOST_BIND_IP:$POSTGRES_HOST_BIND_PORT:5432"
   backup:
     <<: [ *env ]
-    image: "corpusops/dbsmartbackup:pg10"
+    environment: {POSTGRES_HOST: db}
+    image: "corpusops/dbsmartbackup:${DSB_VERSION:-pgrouting-10-2.5-2.6}"
     restart: always
     volumes:
-    - backupdb-dumps:/srv/backups/
-    - backupdb-logs:/srv/backups/logs/
-    - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    - ./local/backup/setup/reconfigure.yml:/setup/reconfigure.yml:ro
+    - backupdb-dumps:/var/db_smart_backup/
+    - backupdb-logs:/var/db_smart_backup/logs/
   setup-postgres:
     <<: [ *env ]
     image: corpusops/pgrouting:10-2.5-2.6
