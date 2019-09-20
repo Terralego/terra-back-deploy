@@ -143,8 +143,8 @@ server {
     }
     {{ if eq .noforcessl "1" }}# {{ end }}if ($forwarded_ssl_scheme != "https"){ rewrite ^(.*)$ https://$host$1 permanent; }
     {{ if ne .nostatics "1" }}
-    location ~ ^/(static_dj/|static-back/) {
-        alias /public/static/;
+    location ~ ^/(?:static_dj/|static-back/)(?<staticspath>.*)$ {
+        alias /public/static/$staticspath;
 
         # static optimisations
         tcp_nodelay off;
