@@ -143,7 +143,7 @@ server {
     }
     {{ if eq .noforcessl "1" }}# {{ end }}if ($forwarded_ssl_scheme != "https"){ rewrite ^(.*)$ https://$host$1 permanent; }
     {{ if ne .nostatics "1" }}
-    location /static_dj/ {
+    location ~ ^/(static_dj/|static-back/) {
         alias /public/static/;
 
         # static optimisations
