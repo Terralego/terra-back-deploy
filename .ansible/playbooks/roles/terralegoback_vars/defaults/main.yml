@@ -116,7 +116,7 @@ cops_terralego_db_docker_env_defaults: |-
   POSTGRES_PASSWORD={{cops_terralego_db_password }}
   PGPASSWD={{cops_terralego_db_password }}
 cops_terralego_docker_env_defaults: |-
-  HOSTNAME="${PROJECT_NAME}"
+  HOSTNAME=django
   FRONT_URL={{ cops_terralego_front_url }}
   DJANGO__FRONT_URL={{ cops_terralego_front_url }}
   #
