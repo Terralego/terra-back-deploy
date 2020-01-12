@@ -3,7 +3,7 @@
     state: directory
     mode: "2751"
     path: "{{item}}"
-  with_items:
+  loop:
   - "{{cops_terralego_db_dir}}"
   - "{{cops_terralego_db_dir}}/local/postgresql/data"
   - "{{cops_terralego_db_dir}}/local/backup"
@@ -37,7 +37,7 @@
       {{cops_terralego_db_dotenv_extra}}
     marker: "# ANSIBLE MANAGED BLOCK :: deploy commit :: {mark}"
 - include_tasks: docker_login.yml
-  with_items: "{{cops_terralego_registries}}"
+  loop: "{{cops_terralego_registries}}"
 - shell: |
     set -ex
     cd "{{cops_terralego_db_dir}}"
