@@ -74,6 +74,7 @@ cops_terralego_email_host_password: ''
 cops_terralego_email_host_port: 1025
 cops_terralego_email_use_tls: 'no'
 # free form for params inside dockerenv
+cops_terralego_hostnames: "{{cops_django_hosts_whitelist}}"
 cops_terralego_sentry_tags: ["env:{{cops_terralego_deploy_env}}"]
 cops_terralego_sentry_dsn: ''
 cops_terralego_tiles_base: "{{cops_terralego_deploy_env}}-tiles-{{cops_terralego_name}}.{{cops_terralego_tld_domain}}"
@@ -125,6 +126,7 @@ cops_terralego_docker_env_defaults: |-
   SECRET_KEY={{ cops_terralego_secret_key }}
   # cors
   DJANGO__CORS_ORIGIN_WHITELIST={{cops_terralego_hosts_whitelist}}
+  DJANGO__COPS_ALL_HOSTNAMES={{cops_terralego_hostnames}}
   DJANGO__ALLOWED_HOSTS={{cops_terralego_hosts_whitelist}}
   DJANGO__DEPLOY_ENV={{cops_terralego_deploy_env}}
   {% if cops_terralego_sentry_dsn %}
